@@ -7,7 +7,7 @@ class SSA(nn.Module):
                  attn_drop_prob=0., proj_drop_prob=0.):
         super(SSA, self).__init__()
         print(f'in_dim in SSA: {in_dim}')
-        assert in_dim % num_heads != 0
+        assert in_dim % num_heads == 0
         
         self.num_heads = num_heads
         self.head_dim = int(in_dim // num_heads)
@@ -45,7 +45,7 @@ class HTSA(nn.Module):
                  local_interval=60, daily_interval=1440, weekly_interval=10080,
                  attn_drop_prob=0., proj_drop_prob=0., device='cpu'):
         super(HTSA, self).__init__()
-        assert in_dim % num_heads != 0
+        assert in_dim % num_heads == 0
 
         self.device = device
         self.num_heads = num_heads
