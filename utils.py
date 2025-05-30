@@ -38,6 +38,7 @@ def parse_args(device):
     args.add_argument('--embed_dim_spa', default=config['model']['embed_dim_spa'], type=int)
     args.add_argument('--hidden_dim', default=config['model']['hidden_dim'], type=int)
     args.add_argument('--channels', type=int, default=config['model']['channels'])
+    args.add_argument('--dropout', type=int, default=config['model']['dropout'])
     args.add_argument('--dynamic', type=str, default=config['model']['dynamic'])
     args.add_argument('--memory_size', type=int, default=config['model']['memory_size'])
     # train
