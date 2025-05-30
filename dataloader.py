@@ -43,8 +43,8 @@ def time_add(data, week_start, interval=5, weekday_only=False, holiday_list=None
     return day_data, week_data, holiday_data
 
 def load_st_dataset(dataset, args):
-    if dataset == 'PEMS08':
-        data_path = os.path.join('./data/PEMS08/PEMS08.npz')
+    if dataset == 'PEMS03':
+        data_path = os.path.join('./data/PEMS03/PEMS03.npz')
         data = np.load(data_path)['data'][:, :, 0]  # only the first dimension, traffic flow data
         print(data.shape, data[data==0].shape)
         week_start = 5
@@ -56,6 +56,28 @@ def load_st_dataset(dataset, args):
         day_data, week_data, holiday_data = time_add(data, week_start, interval=interval, weekday_only=False, holiday_list=holiday_list)
     elif dataset == 'PEMS04':
         data_path = os.path.join('./data/PEMS04/PEMS04.npz')
+        data = np.load(data_path)['data'][:, :, 0]  # only the first dimension, traffic flow data
+        print(data.shape, data[data==0].shape)
+        week_start = 5
+        holiday_list = [4]
+        interval = 5
+        week_day = 7
+        args.interval = interval
+        args.week_day = week_day
+        day_data, week_data, holiday_data = time_add(data, week_start, interval=interval, weekday_only=False, holiday_list=holiday_list)
+    elif dataset == 'PEMS07':
+        data_path = os.path.join('./data/PEMS07/PEMS07.npz')
+        data = np.load(data_path)['data'][:, :, 0]  # only the first dimension, traffic flow data
+        print(data.shape, data[data==0].shape)
+        week_start = 5
+        holiday_list = [4]
+        interval = 5
+        week_day = 7
+        args.interval = interval
+        args.week_day = week_day
+        day_data, week_data, holiday_data = time_add(data, week_start, interval=interval, weekday_only=False, holiday_list=holiday_list)
+    elif dataset == 'PEMS08':
+        data_path = os.path.join('./data/PEMS08/PEMS08.npz')
         data = np.load(data_path)['data'][:, :, 0]  # only the first dimension, traffic flow data
         print(data.shape, data[data==0].shape)
         week_start = 5
