@@ -96,6 +96,8 @@ class HTSA(nn.Module):
             attn = (W_q @ W_k.transpose(-2, -1)) * self.scale
             
             attn = (attn @ W_v).transpose(2, 3).reshape(B, N, T, D).transpose(1, 2)
+            print(f'mask shape: {mask.shape}')
+            print(f'attn shape: {attn.shape}')
             if mask is not None:
                 attn = attn.masked_fill(mask == 0, float('-inf'))
             attn = attn.softmax(dim=-1)
