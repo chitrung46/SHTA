@@ -95,9 +95,9 @@ class HTSA(nn.Module):
             mask = mask.unsqueeze(0).unsqueeze(0).unsqueeze(0)
             attn = (W_q @ W_k.transpose(-2, -1)) * self.scale
             
-            attn_scores = (attn @ W_v).transpose(2, 3).reshape(B, N, T, D).transpose(1, 2)
+            attn = (attn @ W_v).transpose(2, 3).reshape(B, N, T, D).transpose(1, 2)
             if mask is not None:
-                scores = scores.masked_fill(mask == 0, float('-inf'))
+                attn = attn.masked_fill(mask == 0, float('-inf'))
             attn = attn.softmax(dim=-1)
             attn = self.attn_drop(attn)
             attns.append(attn)
