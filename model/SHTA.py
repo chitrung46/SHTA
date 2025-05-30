@@ -128,7 +128,7 @@ class SHTBlock(nn.Module):
         super(SHTBlock, self).__init__()
         self.spatial_attn = SSA(in_dim=in_dim, num_heads=8)
         self.temporal_attn = HTSA(in_dim=in_dim, num_heads=8)
-        self.fusion = SHTFusion()
+        self.fusion = SHTFusion(in_dim=in_dim)
         self.mlp = nn.Sequential(*[
                                     nn.Linear(in_dim, in_dim * 4),
                                     nn.GELU(),
