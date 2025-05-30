@@ -5,7 +5,7 @@ import torch.nn as nn
 from utils import parse_args, init_seed, Mkdir, print_model_parameters
 from utils import scaler_mae_loss, scaler_rmse_loss
 from dataloader import get_dataloader
-from model import STHA
+from model import SHTA
 from trainer import Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -14,7 +14,7 @@ init_seed(args.seed, args.seed_mode)
 
 #config log path
 current_dir = os.path.dirname(os.path.realpath(__file__))
-log_dir = os.path.join(current_dir,'SAVE', args.dataset)
+log_dir = os.path.join(current_dir,'save', args.dataset)
 Mkdir(log_dir)
 args.log_dir = log_dir
 
@@ -27,7 +27,7 @@ args.scaler_zeros = scaler_data.transform(0)
 args.scaler_zeros_day = scaler_day.transform(0)
 args.scaler_zeros_week = scaler_week.transform(0)
 
-model = STHA(args, args.device, args.in_dim)
+model = SHTA(args, args.device, args.in_dim)
 model = model.to(args.device)
 
 if args.xavier:
@@ -71,7 +71,7 @@ trainer = Trainer(model, loss, loss_kl, optimizer, train_loader, val_loader, tes
 if args.mode == 'train':
     trainer.train()
 elif args.mode == 'test':
-    model.load_state_dict(torch.load(log_dir + '/best_model.pth'))
+    model.load_state_dict(torch.load(log_dir + '/SHTA.pth'))
     print("Load saved model")
     trainer.test(model, trainer.args, test_loader, scaler_data, trainer.logger)
 else:

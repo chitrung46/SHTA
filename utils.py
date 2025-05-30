@@ -65,6 +65,7 @@ def parse_args(device):
     args.add_argument('--up_epoch', default=config['train']['up_epoch'], type=str)
     
     # test
+    args.add_argument('--mae_thresh', default=config['test']['mae_thresh'], type=float)
     args.add_argument('--mape_thresh', default=config['test']['mape_thresh'], type=float)
 
     # log
