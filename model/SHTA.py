@@ -6,7 +6,7 @@ class SSA(nn.Module):
     def __init__(self, in_dim, out_dim, num_heads, bias=False, 
                  attn_drop_prob=0., proj_drop_prob=0.):
         super(SSA, self).__init__()
-        assert in_dim % num_heads == 0
+        assert in_dim % num_heads != 0
 
         self.num_heads = num_heads
         self.head_dim = int(in_dim // num_heads)
