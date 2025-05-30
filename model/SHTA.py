@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 class SSA(nn.Module):
-    def __init__(self, in_dim, out_dim, num_heads, bias=False, 
+    def __init__(self, in_dim, num_heads, bias=False, 
                  attn_drop_prob=0., proj_drop_prob=0.):
         super(SSA, self).__init__()
         assert in_dim % num_heads != 0
@@ -17,7 +17,7 @@ class SSA(nn.Module):
         self.v_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         
         self.attn_drop = nn.Dropout(attn_drop_prob)
-        self.proj = nn.Linear(in_dim, out_dim)
+        self.proj = nn.Linear(in_dim, in_dim)
         self.proj_drop = nn.Dropout(proj_drop_prob)
 
     def forward(self, x):
@@ -40,7 +40,7 @@ class SSA(nn.Module):
         return x
     
 class HTSA(nn.Module):
-    def __init__(self, in_dim, out_dim, num_heads, bias=False, 
+    def __init__(self, in_dim, num_heads, bias=False, 
                  local_interval=60, daily_interval=1440, weekly_interval=10080,
                  attn_drop_prob=0., proj_drop_prob=0., device='cpu'):
         super(HTSA, self).__init__()
@@ -59,7 +59,7 @@ class HTSA(nn.Module):
         self.v_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         
         self.attn_drop = nn.Dropout(attn_drop_prob)
-        self.proj = nn.Linear(in_dim, out_dim)
+        self.proj = nn.Linear(in_dim, in_dim)
         self.proj_drop = nn.Dropout(proj_drop_prob)
 
     def _get_mask(self, T, mode):
@@ -125,8 +125,8 @@ class SHTFusion(nn.Module):
 class SHTBlock(nn.Module):
     def __init__(self, in_dim, dropout):
         super(SHTBlock).__init__()
-        self.spatial_attn = SSA(in_dim=in_dim, out_dim=in_dim, num_heads=8)
-        self.temporal_attn = HTSA(in_dim=in_dim, out_dim=in_dim, num_heads=8)
+        self.spatial_attn = SSA(in_dim=in_dim, num_heads=8)
+        self.temporal_attn = HTSA(in_dim=in_dim, num_heads=8)
         self.fusion = SHTFusion()
         self.mlp = nn.Sequential(*[
                                     nn.Linear(in_dim, in_dim * 4),
@@ -163,7 +163,7 @@ class SHTA(nn.Module):
 
         self.layers = nn.ModuleList(
             [
-                SHTBlock(self.channels, dropout=self.dropout) for i in range(num_block)
+                SHTBlock(in_dim=self.channels, dropout=self.dropout) for i in range(num_block)
             ])
 
         self.skip_layers = nn.ModuleList([
