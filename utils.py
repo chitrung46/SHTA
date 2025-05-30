@@ -14,7 +14,7 @@ def parse_args(device):
     args.add_argument('--mode', default='train', type=str, required=True)
     args.add_argument('--device', default=device, type=str, help='indices of GPUs')
     args.add_argument('--cuda', default=True, type=bool)
-    args.add_argument('--model', default='STHA', type=str)
+    args.add_argument('--model', default='SHTA', type=str)
 
     args_get, _ = args.parse_known_args()
 
