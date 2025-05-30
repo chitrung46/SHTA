@@ -182,7 +182,7 @@ class Trainer(object):
                                                 args.mae_thresh, args.mape_thresh)
             logger.info("Horizon {:02d}, MAE: {:.2f}, RMSE: {:.2f}, MAPE: {:.4f}".format(
                 t + 1, mae, rmse, mape*100))
-        mae, rmse, mape, _, corr = apply_metrics(y_pred, y_true, args.mae_thresh, args.mape_thresh)
+        mae, rmse, mape = apply_metrics(y_pred, y_true, args.mae_thresh, args.mape_thresh)
         logger.info("Average Horizon, MAE: {:.2f}, RMSE: {:.2f}, MAPE: {:.4f}".format(
                     mae, rmse, mape*100))
 
