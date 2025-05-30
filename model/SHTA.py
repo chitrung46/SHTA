@@ -64,7 +64,7 @@ class HTSA(nn.Module):
         self.proj_drop = nn.Dropout(proj_drop_prob)
 
     def _get_mask(self, T, mode):
-        mask = torch.zeros(T, T,  device=self.device)
+        mask = torch.zeros(T, T).to(self.device)
         if mode == 'local':
             for i in range(T):
                 start = max(0, i - self.local_interval + 1)
@@ -77,6 +77,7 @@ class HTSA(nn.Module):
             for i in range(T):
                 idxs = [i - j*self.weekly_interval for j in range((i // self.weekly_interval)+1) if i - j*self.weekly_interval >=0]
                 mask[i, idxs] = 1
+        mask.bool()
         return mask
     
     def forward(self, x):
@@ -94,14 +95,16 @@ class HTSA(nn.Module):
             mask = self._get_mask(T, mode)
             mask = mask.unsqueeze(0).unsqueeze(0).unsqueeze(0)
             attn = (W_q @ W_k.transpose(-2, -1)) * self.scale
-            
-            attn = (attn @ W_v).transpose(2, 3).reshape(B, N, T, D).transpose(1, 2)
+
             print(f'mask shape: {mask.shape}')
             print(f'attn shape: {attn.shape}')
             if mask is not None:
-                attn = attn.masked_fill(mask == 0, float('-inf'))
+                attn = attn.masked_fill(mask, float('-inf'))
+            
             attn = attn.softmax(dim=-1)
             attn = self.attn_drop(attn)
+            attn = (attn @ W_v).transpose(2, 3).reshape(B, T, N, D) # B, T, N, D
+ 
             attns.append(attn)
 
         x = torch.cat(attns, dim=-1) # B,N,num_head,T,head_dim*3
