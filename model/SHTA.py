@@ -17,7 +17,7 @@ class SSA(nn.Module):
         self.v_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         
         self.attn_drop = nn.Dropout(attn_drop_prob)
-        self.proj == nn.Linear(in_dim, out_dim)
+        self.proj = nn.Linear(in_dim, out_dim)
         self.proj_drop = nn.Dropout(proj_drop_prob)
 
     def forward(self, x):
@@ -50,13 +50,16 @@ class HTSA(nn.Module):
         self.num_heads = num_heads
         self.head_dim = int(in_dim // num_heads)
         self.scale = self.head_dim ** -0.5
+        self.local_interval = local_interval
+        self.daily_interval = daily_interval
+        self.weekly_interval = weekly_interval
 
         self.k_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         self.q_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         self.v_proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1], bias=bias)
         
         self.attn_drop = nn.Dropout(attn_drop_prob)
-        self.proj == nn.Linear(in_dim, out_dim)
+        self.proj = nn.Linear(in_dim, out_dim)
         self.proj_drop = nn.Dropout(proj_drop_prob)
 
     def _get_mask(self, T, mode):
@@ -122,8 +125,8 @@ class SHTFusion(nn.Module):
 class SHTBlock(nn.Module):
     def __init__(self, in_dim, dropout):
         super(SHTBlock).__init__()
-        self.spatial_attn = SSA()
-        self.temporal_attn = HTSA()
+        self.spatial_attn = SSA(in_dim=in_dim, out_dim=in_dim, num_heads=8)
+        self.temporal_attn = HTSA(in_dim=in_dim, out_dim=in_dim, num_heads=8)
         self.fusion = SHTFusion()
         self.mlp = nn.Sequential(*[
                                     nn.Linear(in_dim, in_dim * 4),
