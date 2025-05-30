@@ -114,7 +114,7 @@ class SHTFusion(nn.Module):
     HTA: hierarchical_temporal_attn
     '''
     def __init__(self, in_dim):
-        super(SHTFusion).__init__()
+        super(SHTFusion, self).__init__()
         self.proj = nn.Conv2d(in_dim, in_dim, kernel_size=[1, 1], stride=[1, 1])
 
     def forward(self, SA, HTA):
@@ -125,7 +125,7 @@ class SHTFusion(nn.Module):
     
 class SHTBlock(nn.Module):
     def __init__(self, in_dim, dropout):
-        super(SHTBlock).__init__()
+        super(SHTBlock, self).__init__()
         self.spatial_attn = SSA(in_dim=in_dim, num_heads=8)
         self.temporal_attn = HTSA(in_dim=in_dim, num_heads=8)
         self.fusion = SHTFusion()
