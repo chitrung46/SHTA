@@ -161,12 +161,9 @@ class SHTA(nn.Module):
         self.start_fc = nn.Linear(in_features=in_dim, out_features=self.channels)
         self.memory_size = args.memory_size
 
-        if in_dim != 1:
-            self.eval_dimin = nn.Linear(in_features=in_dim, out_features=1)
-
         self.layers = nn.ModuleList(
             [
-                SHTBlock(in_dim, dropout=self.dropout) for i in range(num_block)
+                SHTBlock(self.channels, dropout=self.dropout) for i in range(num_block)
             ])
 
         self.skip_layers = nn.ModuleList([

@@ -27,7 +27,7 @@ class TSA(nn.Module):
             raise Exception('Hidden size can not divsisible by the number of attention heads')
         
         self.head_size = int(input_dim // self.K)
-        print(f"head_size {self.head_size}")
+        print(f"head_size in TSA: {self.head_size} | input_dim in TSA: {self.input_dim}")
         self.key_proj = LinearNDimension()
         self.value_proj = LinearNDimension()
 
@@ -81,6 +81,7 @@ class SSA(nn.Module):
             raise Exception('Hidden size is not divisible by the number of attention heads')
 
         self.head_size = int(input_dim // self.K)
+        print(f"head_size in SSA: {self.head_size} | input_dim in SSA: {self.input_dim}")
         self.linear = LinearNDimension()
         self.projection1 = nn.Linear(input_dim, input_dim)
         self.projection2 = nn.Linear(input_dim, input_dim)
