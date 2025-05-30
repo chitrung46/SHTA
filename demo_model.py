@@ -27,6 +27,7 @@ class TSA(nn.Module):
             raise Exception('Hidden size can not divsisible by the number of attention heads')
         
         self.head_size = int(input_dim // self.K)
+        print(f"head_size {self.head_size}")
         self.key_proj = LinearNDimension()
         self.value_proj = LinearNDimension()
 
@@ -109,9 +110,9 @@ class SSA(nn.Module):
         x = self.projection2(x)
         return x
 
-class STHA(nn.Module):
+class SHTA(nn.Module):
     def __init__(self, args, device, dim_in):
-        super(STHA, self).__init__()
+        super(SHTA, self).__init__()
         self.supports = [i.to(device) for i in args.adj_mx]
         self.num_nodes = args.num_nodes
         self.output_dim = args.out_dim

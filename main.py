@@ -5,7 +5,7 @@ import torch.nn as nn
 from utils import parse_args, init_seed, Mkdir, print_model_parameters
 from utils import scaler_mae_loss, scaler_rmse_loss
 from dataloader import get_dataloader
-from model.SHTA import SHTA
+from demo_model import SHTA
 from trainer import Trainer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
