@@ -67,7 +67,7 @@ class HTSA(nn.Module):
         mask = torch.zeros(T, T,  device=self.device)
         if mode == 'local':
             for i in range(T):
-                start = max(0, i - self.recent_window + 1)
+                start = max(0, i - self.local_interval + 1)
                 mask[i, start:i+1] = 1
         elif mode == 'daily':
             for i in range(T):
