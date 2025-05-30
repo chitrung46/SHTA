@@ -97,6 +97,7 @@ class HTSA(nn.Module):
             attn = (W_q @ W_k.transpose(-2, -1)) * self.scale
 
             print(f'mask shape: {mask.shape}')
+            print(mask)
             print(f'attn shape: {attn.shape}')
             if mask is not None:
                 attn = attn.masked_fill(mask, float('-inf'))
